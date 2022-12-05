@@ -1,8 +1,7 @@
-class ImageHandler {
-  public constructor() { }
+const IMAGE_REGEX = "(https?:\/\/.*\.(?:png|jpg))"
 
-  validateImageURL(url: string): boolean {
-    return !!url.match(IMAGE_REGEX)
-  }
+export function validateImageURL(url: string): boolean {
+  return !!url.match(IMAGE_REGEX)
 }
+
 

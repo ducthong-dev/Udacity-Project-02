@@ -9,7 +9,7 @@ import Jimp = require("jimp");
 // RETURNS
 //    an absolute path to a filtered image locally saved file
 export async function filterImageFromURL(inputURL: string): Promise<string> {
-  return new Promise(async (resolve, reject) => {
+  return await new Promise(async (resolve) => {
     try {
       const photo = await Jimp.read(inputURL);
       const outpath =
@@ -22,10 +22,11 @@ export async function filterImageFromURL(inputURL: string): Promise<string> {
           resolve(__dirname + outpath);
         });
     } catch (error) {
-      reject(error);
+      resolve("Not found image")
     }
   });
 }
+
 
 // deleteLocalFiles
 // helper function to delete files on the local disk
@@ -34,6 +35,7 @@ export async function filterImageFromURL(inputURL: string): Promise<string> {
 //    files: Array<string> an array of absolute paths to files
 export async function deleteLocalFiles(files: Array<string>) {
   for (let file of files) {
+    console.log(file)
     fs.unlinkSync(file);
   }
 }
