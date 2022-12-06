@@ -1,8 +1,8 @@
-import express from 'express';
 import bodyParser from 'body-parser';
-import { isNil } from 'lodash'
-import { filterImageFromURL, deleteLocalFiles } from './util/util';
+import express, { Request, Response } from 'express';
+import { isNil } from 'lodash';
 import { validateImageURL } from './util/image-handler';
+import { deleteLocalFiles, filterImageFromURL } from './util/util';
 
 (async () => {
 
@@ -31,20 +31,18 @@ import { validateImageURL } from './util/image-handler';
 
   /**************************************************************************** */
 
-  app.get("/filteredimage", async (req, res) => {
+  app.get("/filteredimage", async (req: Request, res: Response) => {
     const { image_url } = req.query
     if (isNil(image_url)) {
       res.status(410).send("Image URL cannot be blank")
     }
     if (typeof image_url === "string") {
-      const isImageURLValid = validateImageURL(image_url);
-      console.log(isImageURLValid)
-      console.log(image_url)
+      const isImageURLValid: boolean = validateImageURL(image_url);
       if (isImageURLValid) {
         try {
-          const imageResponse = await filterImageFromURL(image_url);
+          const imageResponse: string = await filterImageFromURL(image_url);
           if (imageResponse !== "no image found") {
-            res.status(200).sendFile(imageResponse, async callback => {
+            res.status(200).sendFile(imageResponse, async () => {
               await deleteLocalFiles([imageResponse])
             })
           } else {
